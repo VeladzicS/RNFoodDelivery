@@ -133,48 +133,52 @@ const MainLayout = ({drawerAnimationStyle, navigation, selectedTab, setSelectedT
         }
 
         if(selectedTab == constants.screens.search) {
-            searchTabFlex.value = withTiming(4, {duration:500})
-            searchTabColor.value = withTiming(COLORS.primary, {duration: 500})
             flatListRef?.current?.scrollToIndex({
                 index:1,
                 animated:false
             })
+            searchTabFlex.value = withTiming(4, {duration:500})
+            searchTabColor.value = withTiming(COLORS.primary, {duration: 500})
+
         } else {
             searchTabFlex.value = withTiming(1, {duration:500})
             searchTabColor.value = withTiming(COLORS.white, {duration: 500})
         }
 
         if(selectedTab == constants.screens.cart) {
-            cartTabFlex.value = withTiming(4, {duration:500})
-            cartTabColor.value = withTiming(COLORS.primary, {duration: 500})
             flatListRef?.current?.scrollToIndex({
                 index:2,
                 animated:false
             })
+            cartTabFlex.value = withTiming(4, {duration:500})
+            cartTabColor.value = withTiming(COLORS.primary, {duration: 500})
+
         } else {
             cartTabFlex.value = withTiming(1, {duration:500})
             cartTabColor.value = withTiming(COLORS.white, {duration: 500})
         }
 
         if(selectedTab == constants.screens.favourite) {
-            favouriteTabFlex.value = withTiming(4, {duration:500})
-            favouriteTabColor.value = withTiming(COLORS.primary, {duration: 500})
             flatListRef?.current?.scrollToIndex({
                 index:3,
                 animated:false
             })
+            favouriteTabFlex.value = withTiming(4, {duration:500})
+            favouriteTabColor.value = withTiming(COLORS.primary, {duration: 500})
+
         } else {
             favouriteTabFlex.value = withTiming(1, {duration:500})
             favouriteTabColor.value = withTiming(COLORS.white, {duration: 500})
         }
 
         if(selectedTab == constants.screens.notification) {
-            notificationTabFlex.value = withTiming(4, {duration:500})
-            notificationTabColor.value = withTiming(COLORS.primary, {duration: 500})
             flatListRef?.current?.scrollToIndex({
                 index:4,
                 animated:false
             })
+            notificationTabFlex.value = withTiming(4, {duration:500})
+            notificationTabColor.value = withTiming(COLORS.primary, {duration: 500})
+
         } else {
             notificationTabFlex.value = withTiming(1, {duration:500})
             notificationTabColor.value = withTiming(COLORS.white, {duration: 500})
