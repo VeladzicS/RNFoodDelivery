@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {FONTS, SIZES, COLORS, icons, dummyData} from "../../constants"
 
-import {HorizontalFoodCart} from "../../components"
+import {HorizontalFoodCart, VerticalFoodCart} from "../../components"
 
 const Section = ({title, onPress, children}) => {
     return (
@@ -35,16 +35,25 @@ const Home = () => {
     const [selectedMenuType, setSelectedMenuType] = React.useState(1)
     const [menuList, setMenuList] = React.useState([])
     const [recommends, setRecommends] = React.useState([])
+    const [popular, setPopular] = React.useState([])
 
     React.useEffect(() => {
         handleChangeCategory(selectedCategoryId, selectedMenuType)
     }, [])
     
     function handleChangeCategory(categoryId, menuTypeId) {
+        //Retireve popular menu
+
+        let selectedPopular = dummyData.menu.find(a => a.name == "Popular")
+
         //Retireve recommended menu
         let selectedRecommend = dummyData.menu.find(a => a.name == "Recommended")
+
         //Find the menu based on menuTypeID
         let selectedMenu = dummyData.menu.find(a => a.id == menuTypeId)
+
+        //Set the recommended menu based on categoryID
+        setPopular(selectedPopular?.list.filter(a => a.categories.includes(categoryId)))
 
         //Set the recommended menu based on categoryID
         setRecommends(selectedRecommend?.list.filter(a => a.categories.includes(categoryId)))
@@ -112,6 +121,50 @@ const Home = () => {
 
         )
     }
+    
+    function renderPopularSection() {
+        return(
+            <Section title="Popular Near You" onPress={() => console.log("Show All Popular Content")}>
+           <FlatList data={popular} keyExtractor={(item) => `${item.id}`} horizontal showsVerticalScrollIndicator={false} renderItem={({item, index})=> (
+               <Text>
+                   <VerticalFoodCart containerStyle={{marginLeft: index == 0 ? SIZES.padding : 18, marginRight:index == popular.length - 1 ? SIZES.padding : 0,}} item={item} onPress={() => console.log("Vertical Food Cart")}/>
+               </Text>
+           )}/>
+            </Section>
+        )
+    }
+
+    function renderFoodCategories() {
+        return (
+            <FlatList data={dummyData.categories} keyExtractor={(item) => `${item.id}`} horizontal showsVerticalScrollIndicator={false} renderItem={({item, index}) => (
+                <TouchableOpacity style={{flexDirection:"row", height:55, marginTop:SIZES.padding, marginLeft:index == 0 ? SIZES.padding : SIZES.radius, marginRight:index == dummyData.categories.length - 1 ? SIZES.padding : 0, paddingHorizontal:8,borderRadius:SIZES.radius,backgroundColor:selectedCategoryId == item.id ? COLORS.primary : COLORS.lightGray2 }}
+                onPress={() =>{
+                    setSelectedCategoryId(item.id)
+                    handleChangeCategory(item.id, selectedMenuType)
+                }}
+                >
+            <Image source={item.icon} style={{marginTop:5, height:50, width:50}}/>
+                    <Text style={{alignSelf:"center", marginRight:SIZES.base, color:selectedCategoryId == item.id ? COLORS.white : COLORS.darkGray, ...FONTS.h3}}>
+                        {item.name}
+                    </Text>
+                </TouchableOpacity>
+            )}/>
+        )
+    }
+
+    function renderDeliveryTo() {
+        return (
+            <View style={{marginTop:SIZES.padding, marginHorizontal:SIZES.padding}}>
+                <Text style={{color:COLORS.primary, ...FONTS.body3}}>
+                      DELIVERY TO
+                </Text>
+                <TouchableOpacity style={{flexDirection:"row", marginTop:SIZES.base, alignItems:"center"}}>
+                    <Text style={{...FONTS.h3}}>{dummyData?.myProfile?.address}</Text>
+                    <Image source={icons.down_arrow} style={{marginLeft:SIZES.base, height:20, width:20}}/>
+                </TouchableOpacity>
+            </View>
+        )
+    }
     return (
         <View
             style={{
@@ -123,6 +176,9 @@ const Home = () => {
             
             <FlatList data={menuList} keyExtractor={(item) => `${item.id}`} showsVerticalScrollIndicator={false} ListHeaderComponent={
                 <View>
+                    {renderDeliveryTo()}
+                    {renderFoodCategories()}
+                    {renderPopularSection()}
                     {renderRecommendedSection()}
                     {renderMenuTypes()}
                 </View>
@@ -131,7 +187,9 @@ const Home = () => {
                    <HorizontalFoodCart containerStyle={{height:130, alignItems:'center', marginHorizontal:SIZES.padding, marginBottom:SIZES.radius}} imageStyle={{marginTop:20, height:110, width:110}} item={item} onPress={() => console.log("HorizontalFoodCard")}/>
                 )
             }}
-
+             ListFooterComponent={
+                 <View style={{height:200}}/>
+             }
             />
         </View>
     )
