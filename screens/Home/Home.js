@@ -10,6 +10,8 @@ import {
 import {FONTS, SIZES, COLORS, icons, dummyData} from "../../constants"
 
 import {HorizontalFoodCart, VerticalFoodCart} from "../../components"
+import {FilterModal} from "../index";
+
 
 const Section = ({title, onPress, children}) => {
     return (
@@ -36,6 +38,8 @@ const Home = () => {
     const [menuList, setMenuList] = React.useState([])
     const [recommends, setRecommends] = React.useState([])
     const [popular, setPopular] = React.useState([])
+
+    const [showFilterModal, setShowFilterModal] = React.useState(false)
 
     React.useEffect(() => {
         handleChangeCategory(selectedCategoryId, selectedMenuType)
@@ -74,7 +78,7 @@ const Home = () => {
             }}>
               <Image source={icons.search} style={{height:20,width:20, tintColor:COLORS.black}}/>
             <TextInput style={{flex:1, marginLeft:SIZES.radius, ...FONTS.body3}} placeholder="search food..."/>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => setShowFilterModal(true)}>
                     <Image source={icons.filter} style={{height:20,width:20, tintColor:COLORS.black}}/>
                 </TouchableOpacity>
 
@@ -173,6 +177,14 @@ const Home = () => {
         >
 
             {renderSearch()}
+
+            {showFilterModal &&
+                <FilterModal
+                    isVisible={showFilterModal}
+                    onClose = {() => setShowFilterModal(false) }
+                />
+            }
+
             
             <FlatList data={menuList} keyExtractor={(item) => `${item.id}`} showsVerticalScrollIndicator={false} ListHeaderComponent={
                 <View>
