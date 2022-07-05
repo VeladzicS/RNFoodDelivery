@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import {COLORS, FONTS, SIZES, constants, icons} from "../../constants";
-import {IconButton, TwoPointSlider} from "../../components";
+import {IconButton, TextButton, TextIconButton, TwoPointSlider} from "../../components";
 
 
 const Section = ({containerStyle, title, children}) => {
@@ -37,6 +37,9 @@ const FilterModal = ({isVisible, onClose}) => {
 
     const modalAnimatedValue = React.useRef(new Animated.Value(0)).current
     const [showFilterModal, setShowFilterModal] = React.useState(isVisible)
+    const [deliveryTime, setDeliveryTime] = React.useState("")
+    const [ratings, setRatings] = React.useState("")
+    const [tags, setTags] = React.useState("")
 
         React.useEffect(() => {
             if(showFilterModal) {
@@ -59,6 +62,62 @@ const FilterModal = ({isVisible, onClose}) => {
         outputRange:[SIZES.height, SIZES.height - 680]
     })
 
+    function renderDeliveryTime() {
+        return(
+            <Section title="Delivery Time" containerStyle={{marginTop:40}}>
+
+                <View style={{flexDirection:"row", flexWrap:"wrap", marginTop:SIZES.radius}}>
+                    {constants.delivery_time.map((item, index) => {
+                        return(
+                            <TextButton key={`delivery_time-${index}`} label={item.label} labelStyle={{color:item.id == deliveryTime ? COLORS.white : COLORS.gray, ...FONTS.body3}} buttonContainerStyle={{width:"30%", height:50, margin:5, alignItems:"center", borderRadius:SIZES.base, backgroundColor:item.id == deliveryTime ? COLORS.primary : COLORS.lightGray2}} onPress={() => setDeliveryTime(item.id)}/>
+                        )
+                    })}
+                </View>
+
+            </Section>
+        )
+    }
+
+    function renderPricingRange() {
+        return (
+            <Section title="Pricing Range">
+                <View style={{alignItems:"center"}}>
+                    <TwoPointSlider values={[10, 50]} min={1} max={100} prefix="$" postfix="" onValuesChange={(values) => console.log(values)}/>
+
+                </View>
+            </Section>
+        )
+    }
+
+    function renderRatings() {
+        return (
+            <Section title="Ratings" containerStyle={{marginTop:40}}>
+                <View style={{flexDirection:"row", justifyContent:"space-between", marginTop:SIZES.radius}}>
+                    {constants.ratings.map((item, index) => {
+                        return(
+                            <TextIconButton key={`Ratings-${index}`} containerStyle={{flex:1, height:50, margin:5, alignItems:"center", borderRadius:SIZES.base, backgroundColor:item.id == ratings ? COLORS.primary : COLORS.lightGray2}} label={item.label} labelStyle={{color:item.id == ratings ? COLORS.white : COLORS.gray }} icon={icons.star} iconStyle={{tintColor:item.id == ratings ? COLORS.white : COLORS.gray}} onPress={() => setRatings(item.id)}/>
+                        )
+                    })}
+
+                </View>
+            </Section>
+        )
+    }
+
+    function renderTags() {
+        return (
+            <Section title="Tags">
+                <View style={{flexDirection:"row", flexWrap:"wrap"}}>
+                    {constants.tags.map((item, index) => {
+                        return (
+                            <TextButton key={`Tags-${index}`} label={item.label} labelStyle={{color:item.id == tags ? COLORS.white : COLORS.gray, ...FONTS.body3}} buttonContainerStyle={{height:50, margin:5, paddingHorizontal:SIZES.padding, alignItems:"center", borderRadius:SIZES.base, backgroundColor:item.id == tags ? COLORS.primary : COLORS.lightGray2}} onPress={() => setTags(item.id)}/>
+                        )
+                    })}
+                </View>
+            </Section>
+        )
+    }
+
       return (
           <Modal animationType="fade" transparent={true} visible={isVisible}>
                <View style={{flex:1, backgroundColor:COLORS.transparentBlack7}}>
@@ -78,6 +137,34 @@ const FilterModal = ({isVisible, onClose}) => {
                        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:250}}>
                           {/* Distance*/}
                            {renderDistance()}
+
+                           {/* Delivery Time*/}
+                           {renderDeliveryTime()}
+
+                           {/* Pricing Range*/}
+                           {renderPricingRange()}
+
+                           {/* Ratings*/}
+                           {renderRatings()}
+
+                           {/* Ratings*/}
+                           {renderTags()}
+
+                           {/*Apply Button*/}
+                           {
+                               <View style={{
+                                   position:"absolute",
+                                   bottom:150,
+                                   left:0,
+                                   right:0,
+                                   height:110,
+                                   paddingHorizontal:SIZES.padding,
+                                   paddingVertical:SIZES.radius,
+                                   backgroundColor:COLORS.white
+                               }}>
+                                <TextButton label="Apply Filters" buttonContainerStyle={{height:50, borderRadius:SIZES.base, backgroundColor:COLORS.primary}} onPress={() => console.log("Apply Filter")}/>
+                               </View>
+                           }
 
                        </ScrollView>
                    </Animated.View>

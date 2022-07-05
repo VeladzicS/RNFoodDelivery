@@ -18,10 +18,20 @@ const TwoPointSlider = ({values, min, max,prefix,postfix, onValuesChange})=> {
                       ...styles.shadow}}>
 
                       </View>
+                   <Text style={{
+                       marginTop:5,
+                       color:COLORS.darkGray,
+                       ...FONTS.body3
+                   }}>
+                       {prefix}{e.currentValue}{postfix}
+                   </Text>
                </View>
 
+
            )
-       }}/>
+       }}
+       onValuesChange={(values) => onValuesChange(values)}
+       />
    )
 }
 
